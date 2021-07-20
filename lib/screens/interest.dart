@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:compounding/extras/extensioon.dart';
 import 'package:compounding/widgets/CompondField.dart';
 import 'package:compounding/widgets/calculatioon_button.dart';
@@ -7,7 +5,8 @@ import 'package:compounding/widgets/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CompoundingInterest extends StatelessWidget {
+
+class Interest extends StatelessWidget {
   var interest = TextEditingController();
   var month = TextEditingController();
   var year = TextEditingController();
@@ -59,15 +58,14 @@ class CompoundingInterest extends StatelessWidget {
                       color: Colors.redAccent,
                     ),
                     onTap: () {
-                      Get.to(DetailInterest(
-                          balance: (double.parse(balance.text)).toPrecision(0),
-                          time: (double.parse(month.text)).toPrecision(0),
-                          rate: (double.parse(interest.text)).toPrecision(0),
-                          total:((double.parse(balance.text)) *
-                              (pow(
-                                  (1 + (double.parse(interest.text)) / 100),
-                                  (double.parse(month.text)))))
-                              .toPrecision(0),
+                      Get.to(SimpleInterest(
+                        balance: (double.parse(balance.text)),
+                        time: (double.parse(month.text)),
+                        rate: (double.parse(interest.text)),
+                        total: ((double.parse(balance.text))+(((double.parse(balance.text)) *
+                            (double.parse(interest.text)) *
+                            (double.parse(month.text))) /
+                            100)),
                       ));
                     },
                   )),
@@ -79,35 +77,31 @@ class CompoundingInterest extends StatelessWidget {
   }
 }
 
-class DetailInterest extends StatelessWidget {
-  DetailInterest(
-      {required this.balance,
-      required this.time,
-      required this.rate,
-      required this.total,
-      });
+class SimpleInterest extends StatelessWidget {
+  SimpleInterest(
+      {required this.balance, required this.time, required this.rate, required this.total});
 
   double balance;
   double time;
   double rate;
 
+
   double total;
+
 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: InterestWithChart(balance: balance,time: time,total: total, rate: rate,),
-              ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: InterestWithChart(balance: balance,time: time,total: total, rate: rate,),
+            ),
 
 
-            ],
-          ),
+          ],
         ),
       ),
     );
